@@ -1,55 +1,49 @@
 # Noindex Project<br>
+This project was implemented Aug-2017<br>
+My client web site WordPress (in exchanges for selling >400 SEO-links) failed under the filter Search engine Yandex.
 
-Данный проект был реализован 08-авг-2017 г.<br>
-Суть проекта: <br>
-Веб-сайт http://fanski.ru находящийся в биржах по продаже сео-ссылок GGL, Miralink, Rotapost попал под фильтр Яндекса.<br>
-АГС-2015 накладывается за чрезмерное количество SEO-ссылок на сайте. Сайт потерял большую часть поискового трафика, и у него обнулился тИЦ.<br>
-Согласно рекомендациям поступившим с биржи GoGetLinks:<br>
-"Ссылки, которые размещены через Gogetlinks, нужно закрыть тегами noindex. Также необходимо убрать у этих ссылок анкоры, чтобы остался голый URL (безанкорная ссылка)."
-<br> 
+# Task: 
+
+It is necessary to remove these links anchor text to naked URL (without anchor link)<br> 
 Закрытие ссылок тэгами <noindex></noindex> не представляет сложностей.<br>
 Таким образом, главной задачей была переделка анкоров ссылок в безанкорные во всех статьях, размещенных на сайте. За все  время сущетвования сайта таких ссылок было размещено довольно большое количество и вручную переделывать анкоры заняло бы слишком долгое время.
 
-Для решения задачи были написаны два скрипта: replaceAnchor.php - для замены анкоров биржы GGL и replaceAnchor-rota.php - для ссылок с Ротапост и Миралинкс.
+To solve the problem was the script was written: replaceAnchor.php
 
-Сайт написан на Worpress, поэтому для модификации статей с сео-ссылками использовался тот же подход, что и в проектах https://github.com/Valsym/parser-autoposter и https://github.com/Valsym/railway.
+Because the Site was written in Worpress, so to modify articles with SEO links used the same approach as in the draft:https://github.com/Valsym/parser-autoposter
 
 
-Скрипты на php (см. файлы replaceAnchor.php и replaceAnchor-rota.php)  запускались на хостиге вручную прямо из браузера.<br> 
+The php script (see files replaceAnchor.php) was run on the hosting manually directly from your browser.<br> 
    *****************************************************************************************
-   Скрипты генерируют не просто html-код (это-то довольно просто), а страницы в формате CMS Wordpress, что и составляло главную проблему. Однако, как всегда, удалось её решить. <br>
-   Таким образом, сначала читался контент из статей, на которых были размещены сео-ссылки, затем переделывались анкоры и бывший анкор помещался снаружи ссылки, прямо перед ней. После чего обновленный контнт перезаписывался в Базу Даннных сайта.<br>
+   The scripts generate not just html code (this is pretty simple), but the pages in the Wordpress CMS format that was the main problem. However, as always, managed to solve it. <br>
+   Therefore, first read the content of the articles, which were posted SEO links, and then altered the anchors and the anchor was placed outside the links right in front of her. The updated content overwritten Stored in the Database of the website.<br>
    *****************************************************************************************
-   Список урлов статей, на которых были размещены сео-ссылки, а также сами требуемые ссылки на сайты оптимизаторов и анкоры в удобоном формате csv предоставляют сами биржы GGL, Miralinks. Биржа Ротапост такой файл с урлами и анкорами не предоставляет (но на ней было размещено минимальное кол-во ссылок, поэтому составить такой список вручную не составило труда).
+   List of URLs of articles which have been placed SEO-links as well as the required links to the websites of SEO and anchor text in udobnom csv format supplied by the exchange GGL, Miralinks. 
    ************************************************************************************
-<b>Несколько слов об алгоритме.</b><br>
-После считывания ЧПУ-урла из файла ggl.cvs, для дальнейшей работы из него необходимо получить ID статьи (поста): <br>
+<b>A few words about the algorithm.</b><br>
+After reading the Man-Like-Url (Permalink as http://site.com/%postname%/) from the file ggl.cvs, for further work it is necessary to get the article ID (of the post):<br>
 $postid = url_to_postid( $url );<br>
 
-Далее можно прочитать всю необходимую инфу из соответствующей строки БД Вордпресс по ID:<br>
+You can continue to read all the necessary info from the corresponding row of the database for WordPress ID:<br>
 $post = get_post( $postid );<br>
-Тут $post - это ассоциативный массив, в частности содержащий тело поста $content = $post->post_content;
+Here $post is an associative array, in particular containing the body of the post $content = $post->post_content;
 
-Далее вызывается функция replaceAnchor():<br>
+Next, it calls a function replaceAnchor():<br>
 $ncontent = replaceAnchor($content, $url2); <br>
-которая собственно и меняет анкор на безанкор и ставит анкор снаружи сео-ссылки.
+which actually changes the anchor without the anchor and puts the anchor on the outside of SEO-references.
 
-И в конце идет перезапись контента поста:<br>
+And at the end is overwriting the content of the post:<br>
 $post->post_content = $ncontent;<br>
 $post_id = wp_update_post( $post );
 
-После чего переходим к следующей записи в главном цикле.
+Then move on to the next record in the main loop.
 	
-В функции replaceAnchor я решил не использовать регулярные выражения или ноды DOMа для поиска подстроки<br> с анкором и сео-ссылкой, а воспользовался более простим и понятным (для меня) поиском с помощью<br> strpos, strripos, substr и заменой str_replace.
+In function replaceAnchor I decided not to use regular expressions or DOM nodes for substring search<br> with anchor text and SEO-link, and used by more than sorry and clear (to me) search using<br> strpos, strripos, substr & str_replace.
 
-В случае, когда анкор изначально был безанкорным: <br>
+In the case where the anchor originally was without the anchor: <br>
 if (strpos($anchor, 'http://') !== false) {...},<br>
-то такой контент поста не изменялся и осуществлялся переход к следующему шагу главного цикла.
+the content of the post was not changed and carried out the transition to the next step of the main loop.
 	
 *********************************************************************************************************	
-Скрипт для бирж Миралинкс и Ротапост replaceAnchor-rota.php был немного видоизменен, поскольку: <br>
-1. в Миралинкс иногда размещались сразу две сео-ссылки на статью. <br>
-2. в обоих этих биржах структура ссылок отличалась от ГоГетЛинкс (в тегах a .../a всегда присутствовал атрибут title перед href).
-   
-*********************************************************************************************************
+
 
