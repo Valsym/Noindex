@@ -1,5 +1,5 @@
 <?php
-/* Привязка к админке сайта */
+/* Linking to the admin site - Привязка к админке сайта */
 define('WP_USE_THEMES', true);
 $ABSPATH = dirname(dirname(__FILE__));
 $site="http://fanski.ru";
@@ -13,7 +13,7 @@ require(dirname(dirname(__FILE__)) . '/wp-load.php');
 
 $post = array();
 $rows = 11;
-/* Чтение инфы из файла .cvs */
+/* Reading information from a file - Чтение инфы из файла .cvs */
 $mainarr = array();
 $row = 0;
 $file = "http://fanski.ru/noindex/ggl.csv";
@@ -21,7 +21,7 @@ $handle = fopen($file, "r");
 
 if (!$handle) exit('File $file - not exist!');
 
-/* Главный цикл */
+/* Main loop - Главный цикл */
 
 while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 	
@@ -48,7 +48,7 @@ while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 
 	$post->post_content = $ncontent;
 
-	// Обновляем данные в БД
+	// Updated data in the database - Обновляем данные в БД
 	$post_id = wp_update_post( $post );
 	
     $row++;if ($row > $rows) break;
