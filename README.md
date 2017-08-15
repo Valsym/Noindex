@@ -2,11 +2,9 @@
 This project was implemented Aug-2017<br>
 My client web site WordPress (in exchanges for selling >400 SEO-links) failed under the filter Search engine Yandex.
 
-# Task: 
-
+# Task: <br>
 It is necessary to remove these links anchor text to naked URL (without anchor link)<br> 
-Закрытие ссылок тэгами <noindex></noindex> не представляет сложностей.<br>
-Таким образом, главной задачей была переделка анкоров ссылок в безанкорные во всех статьях, размещенных на сайте. За все  время сущетвования сайта таких ссылок было размещено довольно большое количество и вручную переделывать анкоры заняло бы слишком долгое время.
+
 
 To solve the problem was the script was written: replaceAnchor.php
 
@@ -46,4 +44,4 @@ the content of the post was not changed and carried out the transition to the ne
 	
 *********************************************************************************************************	
 
-
+2017 © Valery Simonov
