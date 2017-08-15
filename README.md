@@ -3,10 +3,10 @@ This project was implemented Aug-2017<br>
 My client web site WordPress (in exchanges for selling >400 SEO-links) failed under the filter Search engine Yandex.
 
 # Task: <br>
-It is necessary to remove these links anchor text to naked URL (without anchor link)<br> 
+<b>It is necessary to remove these links anchor text to naked URL (without anchor link)</b> 
 
 
-To solve the problem was the script was written: replaceAnchor.php
+To solve the problem was the script was written: https://github.com/Valsym/Noindex/blob/master/replaceAnchor.php
 
 Because the Site was written in Worpress, so to modify articles with SEO links used the same approach as in the draft:https://github.com/Valsym/parser-autoposter
 
